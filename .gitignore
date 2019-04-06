@@ -1,0 +1,16 @@
+# vscode
+.vscode/
+.settings/
+.project/
+*.code-workspace
+
+# idea
+.idea/
+.pytest_cache/
+.DS_Store
+
+# py
+*.pyc
+
+# other
+*.log
