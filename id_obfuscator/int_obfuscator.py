@@ -6,7 +6,7 @@ from ._util import modinv, is_prime
 DEFAULT_SIZE = 32
 
 
-class IntConfuser:
+class IntObfuscator:
     def __init__(self, prime: int, salt_int: int, size=DEFAULT_SIZE):
         """
 
