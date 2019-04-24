@@ -26,9 +26,14 @@ class IntObfuscator:
         self.__max = 2 ** size - 1
 
     def encode(self, value: int):
-        assert value >= 0
+        # when value is 0, the result is salt_int,it will expose our salt
+        if value <= 0 or value > self.__max:
+            raise ValueError(
+                'value must be positive integer and less than 2**{}，current value is {}'.format(self._size, value))
         return ((value * self._prime) & self.__max) ^ self._salt_int
 
     def decode(self, num: int):
-        assert num >= 0
-        return ((num ^ self._salt_int) * self._inverse) & self.__max
+        if 0 <= num <= self.__max and num != self._salt_int:
+            return ((num ^ self._salt_int) * self._inverse) & self.__max
+        else:
+            return None
