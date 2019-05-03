@@ -68,6 +68,8 @@ class StrObfuscator:
         if not isinstance(encoded, str) or not encoded:
             return None
         int_encoded = self._decode_str(encoded)
+        if not int_encoded:
+            return None
         int_origin = self._int_obfuscator.decode(int_encoded)
         if int_origin is None:
             return None
