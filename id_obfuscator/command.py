@@ -28,9 +28,9 @@ base_available = {
 
 
 @click.command(help='生成一组给混淆器需要的随机初始参数')
-@click.option('bits', '--bit', '-b', default=32, type=int, help='混淆算法需要支持的最大数的位数。产生的素数将会尽量保证相同得位数')
+@click.option('bits', '--bit', '-b', default=32, type=int, help='混淆算法需要支持的最大数的位数')
 @click.option('base', '--base', '-B', default='base62', type=click.Choice(list(base_available.keys())), help='使用内置的字母表')
-@click.option('alphabet', '--alphabet', type=str, help='可用用字母表，默认使用 base62')
+@click.option('alphabet', '--alphabet', type=str, help='可用的字母表，默认使用 base62')
 def spark(bits, base, alphabet):
     prime = generate_prime(bits)
     random_int = random.getrandbits(bits)
