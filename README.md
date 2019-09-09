@@ -23,9 +23,9 @@ id obfuscator
 
 ## Getting Started
 ```python
-from id_obfuscator import IntObfuscator, StrObfuscator
-
 # 混淆为数字
+from id_obfuscator import IntObfuscator
+
 obfuscator = IntObfuscator(2647619789, 4120924286, size=32)
 obfuscated = obfuscator.encode(123456789)
 print(obfuscated)  # output: 1409302959
@@ -33,11 +33,22 @@ i = obfuscator.decode(obfuscated)
 print(i)  # output: 123456789
 
 # 混淆为字符串
+from id_obfuscator import StrObfuscator
+
 obfuscator = StrObfuscator(2647619789, 4120924286, 'ZoB2iHVWXPUEmxYgzJ8LSjekun5lt0DM7bhd4AvcGO6y3aR9rQNq1TpKfICFsw', size=32)
 obfuscated = obfuscator.encode(123456789)
 print(obfuscated)  # output: KTNUiFo
 i = obfuscator.decode(obfuscated)
 print(i)  # output: 123456789
+
+# 固定长度
+from id_obfuscator import FixedLengthStrObfuscator
+
+obfuscator = FixedLengthStrObfuscator(2647619789, 4120924286, 'ZoB2iHVWXPUEmxYgzJ8LSjekun5lt0DM7bhd4AvcGO6y3aR9rQNq1TpKfICFsw', size=32)
+print(obfuscator.encode(1))  # O6q0fML
+print(obfuscator.encode(2))  # 8pFKFEr
+print(obfuscator.encode(123456))  # mEjeNmE
+print(obfuscator.encode(2 ** 31 - 1))  # yXzPxco
 ```
 
 
