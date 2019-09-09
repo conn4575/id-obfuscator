@@ -41,8 +41,8 @@ print(i)  # output: 123456789
 ```
 
 
-## 用法简介
-### 1. IntObfuscator
+## 用法
+### IntObfuscator
 `IntObfuscator` 的原理是利用了 Knuth 的乘法哈希法（Knuth's multiplicative hashing method）来实现可逆的整数混淆。`IntObfuscator` 初始化时需要三个参数：
 * prime：一个比较大的素数，虽然实际上任何正素数都可以，但是这个数的大小和混淆效果关系密切，如果你的混淆目标是 32 位以内的所有正整数，推荐这个素数应该也是 32 位或者 31 位的。
 * salt_int：一个整数盐值，它的位数也应该和你要混淆的位数基本一致
@@ -53,7 +53,7 @@ print(i)  # output: 123456789
 
 假如你取的 size=32，`IntObfuscator` 可以保证任何 32 位以内的正整数（零除外）都可以转化为另一个32 位以内的整数（包括零在内），也就说任何 32 位的整数都可以被反解析出另一个正整数作为它的混淆前的值，它是一个"可逆函数"。
 
-### 2. StrObfuscator
+### StrObfuscator
 `StrObfuscator` 借鉴了 hashids 的部分思想，它会先使用`IntObfuscator`将传入的数字混淆为另一个数字，然后再使用指定的字符集将这个数字编码为一个字符串。  
 `StrObfuscator`需要 4 个参数，
 * prime、salt_int、size 和`IntObfuscator`一样，不再解释
@@ -62,8 +62,13 @@ print(i)  # output: 123456789
 相比于`IntObfuscator`，`StrObfuscator`有一个非常有用的特性，它生成的混淆字符具有一定的自校验性。  
 不是所有的字符串都可以反解析出一个有效的数字出来。只有那些通过`encode`方法得到的混淆字符才能反解析出原始的数字 id，其他字符串几乎都会被校验失败（此时返回值为 None）。虽然不能保证 100%，但是绝大多数情况下这个结论都是成立的。这个特性对防爬虫很有用，你几乎不需要查询数据库就可以判断出那些非法的key。
 
+### FixedLengthStrObfuscator
+`FixedLengthStrObfuscator`继承自`StrObfuscator`，它可以保证混淆后的字符串都有固定的长度。初始化使额外多了可选参数：
+* fixed_length：混淆字符的固定长度，一般情况下可以不设置，初始化是会根据`size`和`alphabet`自动计算出能够覆盖`size`位数以内的所有整数所需要的最小字符长度。确保你自己设置的最小长度不能小于这个最小值，初始化时程序会检查这一点。
+* padding_alphabet：用于补齐长度的字符集，这个参数也是可选的，默认情况下会从`alphabet`里面挑选 `ceil(len(alphabet)/12)`个字符作为 `padding_alphabet`, 例如，如果 size=32，alphabet=base62，那么将从这 62 个字符里选出 6 个作为 padding 字符，剩余的 56 个字符用于混淆，此时最小固定长度为 7。
 
-### 3. 命令行工具
+
+## 命令行工具
 为了方便的得到一组合适的初始值，我写了一个命令行工具，你只需要执行以下命令：
 ```
 > python -m id_obfuscator.command spark
